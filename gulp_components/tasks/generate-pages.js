@@ -97,8 +97,7 @@ gulp.task('generate-pages', function(done){
 
 		if (item.children && item.children.length > 0) {
 			for (var i = 0; i < item.children.length; i++) {
-				if (!item.children[i].section_only || item.children[i].section_only !== 'true') {
-					PAGES.push(item.children[i].url);
+				if (typeof item.children[i].section_only === 'undefined' || item.children[i].section_only === 'false' || !item.children[i].section_only);
 				}
 				getPagesList(item.children[i]); //recursive for children of children
 				//TODO: refactor to allow for infinite levels of children
