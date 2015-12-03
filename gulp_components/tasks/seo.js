@@ -90,7 +90,7 @@ gulp.task('seo',function(done){
 		});
 
 		opts.logMsg('injecting seo into ' + destDir + 'index.html...');
-		opts.logMsg(contents);
+		//opts.logMsg(contents);
 
 		gulp.src(destDir + 'index.html')
 				.pipe(opts.plugins.replace(/<noscript id="seo"[^>]*>([\s\S]*?)<\/noscript>/gm,'')) //remove any previous instances of noscript block
