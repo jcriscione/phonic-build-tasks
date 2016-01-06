@@ -15,7 +15,7 @@ module.exports = {
 	categoryPages: '/*/**/index.html',
 	ngTemplates: '/templates/**/*.html',
 	config: require(process.cwd() + '/config'),
-	staticAssets : ['/**/*.{css,map,woff,eot,ttf,json,gif}'],
+	staticAssets : ['/**/*.{css,map,woff,eot,ttf,json,gif,mp4,ogv,webm}'],
 	getProjectTitle: function(cb) {
 
 		require('read-package-json')('./package.json',function(err,data){
