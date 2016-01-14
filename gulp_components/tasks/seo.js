@@ -50,7 +50,7 @@ gulp.task('seo',function(done){
 
 		opts.logMsg('scraping ' + page + '...allowing 5s for it load...');
 		command = 'phantomjs bower_components/phonic-build-tasks/seo.js ' + env + ' ' + page;
-		exec(command, {maxBuffer: 300*1024} ,function(error, stdout, stderr){
+		exec(command, {maxBuffer: 200*2048} ,function(error, stdout, stderr){
 			if (stderr) {
 				opts.logErr('************ ERROR: ' + stderr);
 				done();
