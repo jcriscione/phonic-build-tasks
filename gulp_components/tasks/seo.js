@@ -1,3 +1,5 @@
+//replace /SourceCode/bower_components/phonic-build-tasks/gulp_components/tasks/seo.js
+
 /**
  * run the site in phantomjs, scrape the content, insert it into noscript tags
  */
@@ -22,6 +24,7 @@ gulp.task('seo',function(done){
 		getPagesList(data.items[0]);
 		opts.logMsg('starting seo scraping...');
 		env = args.stage ? 'stage' : 'prod';
+		opts.logMsg(PAGES.length + ' pages total');
 		runPhantom(PAGES[i]);
 	});
 
@@ -48,7 +51,7 @@ gulp.task('seo',function(done){
 
 	function runPhantom(page) {
 
-		opts.logMsg('scraping ' + page + '...allowing 5s for it load...');
+		opts.logMsg('scraping page ' + (i+1) + ', path: ' + page);
 		command = 'phantomjs bower_components/phonic-build-tasks/seo.js ' + env + ' ' + page;
 		exec(command, {maxBuffer: 200*2048} ,function(error, stdout, stderr){
 			if (stderr) {
@@ -60,6 +63,7 @@ gulp.task('seo',function(done){
 				done();
 			}
 			else {
+				opts.logMsg('successful scrape for page ' + (i+1) + ', path: ' + page);
 				injectSeo(page, stdout);
 				i++;
 
@@ -77,18 +81,19 @@ gulp.task('seo',function(done){
 	function injectSeo(path, contents) {
 		var destDir;
 
+
 		if (path === '/') {
 			destDir = opts.dist + path;
 		}
 		else {
 			destDir = opts.dist + '/' + path;
 		}
-
+		opts.logMsg('starting htmlmin for path ' + destDir);
 		contents = opts.packages.htmlmin(contents, {
 			removeComments: true,
 			collapseWhitespace: true
 		});
-
+		opts.logMsg('finished htmlmin for path ' + destDir);
 		opts.logMsg('injecting seo into ' + destDir + 'index.html...');
 		//opts.logMsg(contents);
 
