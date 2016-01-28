@@ -4,6 +4,7 @@ var system = require('system'),
 		page = require('webpage').create(),
 		fs = require('fs'),
 		config = require('../../config'),
+		seoTemp = './_seo-temp/',
 		env, host, body, fileName, text, ready, t, c, i= 0, path;
 
 fs.write('./phantom-log.txt','\n\nphantomjs', 'a');
@@ -60,13 +61,16 @@ function getHtml() {
 				fs.write('./phantom-log.txt','\nphantomjs success evaluating ' + host + path, 'a');
 				text = body.innerHTML.replace(/<script[^>]*>([\s\S]*?)<\/script>/gm,'');
 				fs.write('./phantom-log.txt','\nphantomjs scrape length = ' + text.length + ' for ' + host + path, 'a');
+
 				if (text.length < 1) {
 					console.log('[phantomjs log]' + ' ' + 'Scrape empty!');
 				}
 
 				else {
-					fs.write('./phantom-log.txt','\nphantomjs returning scrape to gulp for ' + host + path, 'a');
-					console.log(text);
+					//console.log(seoTemp);
+					fs.write('./phantom-log.txt','\nphantomjs writing scrape to ' + seoTemp + path + 'index.txt' + ' for ' + host + path, 'a');
+					fs.write(seoTemp + path + 'index.txt',text, 'w');
+					console.log('complete');
 					fs.write('./phantom-log.txt','\nphantomjs success returning scrape to gulp for ' + host + path, 'a');
 				}
 				fs.write('./phantom-log.txt','\nphantomjs exiting for' + host + path, 'a');
