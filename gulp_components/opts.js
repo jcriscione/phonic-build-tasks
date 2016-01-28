@@ -8,6 +8,7 @@ module.exports = {
 	path: require('path'),
 	src: './src',
 	dist: './dist',
+	seoTemp: './_seo-temp',
 	cssDir: '/css',
 	imgDir: '/i',
 	jsDir: '/js',
