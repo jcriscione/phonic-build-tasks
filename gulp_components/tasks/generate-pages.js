@@ -121,10 +121,12 @@ gulp.task('generate-pages', function(done){
 			}
 
 			file = dest + outputPath + 'index.html';
-			level = outputPath === '/' ? 0 : (outputPath.split('/')).length - 1;
+			level = _.filter(outputPath.split('/'), function(i) {
+				return !_.isEmpty(i);
+			}).length;
 			relpath = function() {
 				var str = '';
-				for (var i=0;i < level; i++) {
+				for (var i = 0; i < level; i++) {
 					str += '../';
 				}
 				return str;
