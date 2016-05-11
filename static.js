@@ -1,7 +1,7 @@
 var system = require('system'),
 		page = require('webpage').create(),
 		fs = require('fs'),
-		host, fileName, content, t, path;
+		host, fileName, content, t, path, body, text;
 
 if (system.args[1] && system.args[2]) {
 	host = system.args[1];
@@ -54,9 +54,40 @@ function getHtml() {
 	}
 
 	/**
-	 * open the page in browser, give it time to load and then pull the entire content of the page.
+	 * open the page in browser, give it time to load and then pull the  content of the layout div.
 	 */
 	page.open(host + path, function() {
+
+		t = setInterval(function(){
+
+			// ensure that the Angular templates have rendered
+			ready = page.evaluate(function(){
+				return document.getElementById('layout') !== null;
+			});
+
+			if (ready) {
+				clearInterval(t);
+				// content = page.content; // full content of entire page
+				body = page.evaluate(function() {
+					return document.getElementById('layout');
+				});
+				text = body.innerHTML.replace(/<script[^>]*>([\s\S]*?)<\/script>/gm,'');
+				if (text.length < 1) {
+					console.log('[phantomjs log]' + ' ' + 'Scrape empty!');
+				} else {
+					console.log(text);
+				}
+				phantom.exit();
+			}
+			else {
+				console.log('[phantomjs log]' + ' ' + host + path + ' page timeout, page not executing properly or can\'t find #layout, exiting incomplete... \n');
+				clearInterval(t);
+				phantom.exit();
+			}
+
+		}, 5000);
+
+		/*
 
 		t = setInterval(function(){
 
@@ -68,7 +99,20 @@ function getHtml() {
 
 			if (ready) {
 				clearInterval(t);
+
+				content = page.evaluate(function() {
+					return document.getElementById('layout');
+				});
+				var layout = content.innerHTML.replace(/<script[^>]*>([\s\S]*?)<\/script>/gm,'');
+
+				if (text.length < 1) {
+					console.log('[phantomjs log]' + ' ' + 'Scrape empty!');
+				} else {
+					console.log(layout);
+				}
 				
+				
+				/*
 				content = page.content;
 
 				if (content.length < 1) {
@@ -76,6 +120,9 @@ function getHtml() {
 				} else {
 					console.log(content);
 				}
+				*/
+
+		/*
 
 				phantom.exit();
 			}
@@ -86,5 +133,8 @@ function getHtml() {
 			}
 
 		}, 5000);
+
+
+		*/
 	});
 }

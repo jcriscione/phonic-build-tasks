@@ -97,7 +97,8 @@ gulp.task('static',function(done){
 		utils.logMsg('creating static file in ' + destDir + 'index.html\n');
 
 		gulp.src(destDir + 'index.html')
-				.pipe(plugins.replace(/[\s\S]*/,contents)) //replace all content
+				//.pipe(plugins.replace(/[\s\S]*/,contents)) //replace all content
+				.pipe(plugins.injectString.replace('<div get-template="layout/layout" id="layout"></div>', '<div get-template="layout/layout" id="layout">' + contents + '</div>\n'))
 				.pipe(gulp.dest(destDir));
 	}
 });

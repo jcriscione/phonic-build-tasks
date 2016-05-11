@@ -32,6 +32,33 @@ gulp.task('dev', gulp.series(
 		'serve'
 ));
 
+
+gulp.task('static', gulp.series(
+	'set-build-directory:dist',
+	'get-json',
+	'generate-pages',
+	gulp.parallel(
+		'app-config:static',
+		'wiredep',
+		'ng-templates'
+	),
+	gulp.parallel(
+		'concat-js:dist',
+		'less:dist',
+		'images:dist',
+		'static-assets'
+	),
+	'serve',
+	'static',
+	function(done) {
+		packages.nodeNotifier.notify({
+			'title': 'Phonic',
+			'message': 'Static Dist build complete'
+		});
+		done();
+	}
+));
+
 gulp.task('dist', gulp.series(
 		'set-build-directory:dist',
 		'get-json',
