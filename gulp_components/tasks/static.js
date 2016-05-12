@@ -88,11 +88,10 @@ gulp.task('static',function(done){
 			destDir = opts.paths.dist + '/' + path;
 		}
 
-		/*
 		contents = packages.htmlmin(contents, {
+			removeComments: true,
 			collapseWhitespace: true
 		});
-		*/
 
 		utils.logMsg('creating static file in ' + destDir + 'index.html\n');
 
