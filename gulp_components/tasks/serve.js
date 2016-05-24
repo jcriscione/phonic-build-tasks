@@ -1,13 +1,15 @@
 var gulp = require('gulp'),
-		opts = require('../opts'),
-		packages = require('../packages'),
-		plugins = require('../plugins'),
-		utils = require('../utils');
+	opts = require('../opts'),
+	packages = require('../packages'),
+	plugins = require('../plugins'),
+	utils = require('../utils');
 
 gulp.task('serve', function(done){
 
 	var dest = process.env.buildDirectory || opts.paths.tmp,
 		browserSync = packages.browserSync.create();
+
+	console.log(dest);
 
 	browserSync.init({
 		server: {
@@ -24,24 +26,34 @@ gulp.task('serve', function(done){
 
 
 	if (dest !== opts.paths.dist) {
+		console.log('watching');
 		gulp.watch(
 			'./config.js',
 			gulp.series(
 				'app-config',
 				'concat-js:dev:app',
-				browserSync.reload
+				function(done) {
+					browserSync.reload();
+					done();
+				}
 		));
 		gulp.watch(
 			opts.paths.src + '/**/*.less',
 			gulp.series(
 				'less:dev',
-				browserSync.reload
+				function(done) {
+					browserSync.reload();
+					done();
+				}
 		));
 		gulp.watch(
 			opts.paths.src + opts.paths.jsDir + '/_lib/**/*.js',
 			gulp.series(
 				'concat-js:dev:lib',
-				browserSync.reload
+				function(done) {
+					browserSync.reload();
+					done();
+				}
 		));
 		gulp.watch([
 			opts.paths.src + '/**/*.js',
@@ -49,20 +61,29 @@ gulp.task('serve', function(done){
 			],
 			gulp.series(
 				'concat-js:dev:app',
-				browserSync.reload
+				function(done) {
+					browserSync.reload();
+					done();
+				}
 		));
 		gulp.watch(
 			opts.paths.src + opts.paths.ngTemplates,
 			gulp.series(
 				'ng-templates',
 				'concat-js:dev:app',
-				browserSync.reload
+				function(done) {
+					browserSync.reload();
+					done();
+				}
 		));
 		gulp.watch(
 			opts.paths.src + opts.paths.imgDir + '/**/*',
 			gulp.series(
-					'images:dev',
-					browserSync.reload
+				'images:dev',
+				function(done) {
+					browserSync.reload();
+					done();
+				}
 		));
 	}
 });
